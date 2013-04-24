@@ -14,6 +14,19 @@ Like `node-zookeeper-client`, node-zk-ultralight's locking is based on [the ZooK
 
 The key difference: the ZK lock recipe recommends negotiating for the lock under the requested lock node with child nodes like `_locknode_/guid-lock-<sequence number>`. However, [ephemeral nodes may not have children](http://zookeeper.apache.org/doc/r3.2.1/zookeeperProgrammers.html#Ephemeral+Nodes), so applications with a large number of unique locks, especially a monotonically increasing number of locks (such as locking on a unique timestamp), pose a management problem. Locks created with node-zk-ultralight are ephemeral, and when no longer needed, they'll evaporate like the morning dew with the sunrise.
 
+## Usage
+
+```javascript
+function someAsyncActionWithLocking(callback) {
+  var cxn = zkultra.getCxn(settings.ZOOKEEPER_URLS);
+  async.series([
+    cxn.lock.bind(cxn, '/some/lock/i/need', process.title +'-'+ process.pid),
+    someAsyncAction,
+    cxn.unlock.bind(cxn, '/some/lock/i/need')
+  ], callback);
+};
+```
+
 ## Development
 
 ### Building

@@ -12,6 +12,8 @@
   "keywords": [ "locking", "zookeeper", "distributed locking" ],
   "homepage": "",
   "repository": {
+    "type": "git",
+    "url": "https://github.com/rackerlabs/node-zk-ultralight"
   },
   "directories": {
     "lib": "./lib"
