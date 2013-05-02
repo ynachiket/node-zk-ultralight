@@ -1,3 +1,19 @@
+/*
+Copyright 2013 Rackspace Hosting, Inc
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 var async = require('async');
 
 var zkultra = require('../lib/ultralight');
@@ -154,8 +170,7 @@ exports['test_close_unlocks_so_others_can_lock'] = function(test, assert) {
       callback(null, zkultra.getCxn(URLS));
     }],
     'lock again': ['new client', function(callback, results) {
-      results['new client'].lock('/111/Minna', 'still great coffee');
-      callback();
+      results['new client'].lock('/111/Minna', 'still great coffee', callback);
     }]
   }, function(err) {
     assert.ifError(err);
