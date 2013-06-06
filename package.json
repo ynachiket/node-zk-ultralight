@@ -20,7 +20,8 @@
   },
   "scripts": {
     "lint": "./scripts/lint.sh",
-    "test": "./scripts/tests.sh"
+    "test": "./scripts/tests.sh",
+    "coverage": "./scripts/coverage.sh"
   },
   "dependencies": {
     "zookeeper": "3.4.1-2",
@@ -29,7 +30,7 @@
     "logmagic": "= 0.1.4"
   },
   "devDependencies": {
-     "whiskey": "0.7.0",
+     "whiskey": "0.8.3",
      "jshint": "1.1.0"
   },
   "engines": {

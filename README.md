@@ -49,6 +49,10 @@ $ make
 
 `npm run-script lint`
 
+### Running coverage
+
+`npm run-script coverage`
+
 # License
 
 Library is distributed under the [Apache license](http://www.apache.org/licenses/LICENSE-2.0.html).
