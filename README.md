@@ -2,6 +2,8 @@
 
 Slimmer profile, low-calorie distributed locking library based on [node-zookeeper-client](https://github.com/racker/node-zookeeper-client)
 
+<a href="https://nodei.co/npm-dl/zk-ultralight/"><img src="https://nodei.co/npm-dl/zk-ultralight.png"></a>
+
 ## Why a new library?
 
 * Mildly different, much smaller interface
