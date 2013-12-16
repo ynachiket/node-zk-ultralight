@@ -179,3 +179,16 @@ exports['test_close_unlocks_so_others_can_lock'] = function(test, assert) {
 };
 
 
+exports['test_get_children_error'] = function(test, assert) {
+  var cxn = zkultra.getCxn(URLS);
+
+  // Override the ._getChildren function to force it to error when called inside of .lock
+  cxn._getChildren = function(path, watch, callback) {
+    callback('no node');
+  };
+
+  cxn.lock('/Stumptown/coffee', 'the best coffee', function(err) {
+    assert.ok(err);
+    test.finish();
+  });
+};
