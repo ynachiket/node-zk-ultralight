@@ -1,7 +1,7 @@
 {
   "name": "zk-ultralight",
   "description": "An even simpler library for locking with ZooKeeper based on node-zookeeper-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Rackspace US, Inc.",
   "contributors": [
     "Ryan Phillips <ryan.phillips@rackspace.com>",
