@@ -1,0 +1,16 @@
+language: node_js
+
+node_js:
+  - 0.6
+  - 0.8
+
+before_install:
+  - npm conf set strict-ssl false
+
+script: 
+  - npm run-script lint
+  - npm run-script test
+
+notifications:
+  email:
+    - nachiket.torwekar@rackspace.com
