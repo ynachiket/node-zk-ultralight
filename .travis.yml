@@ -9,6 +9,7 @@ before_install:
 
 before_script:
   - make all 
+
 script: 
   - npm run-script lint
   - npm run-script test
