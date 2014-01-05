@@ -50,6 +50,8 @@ $ make
 
 `npm run-script lint`
 
+[![Dependency Status](https://david-dm.org/rackerlabs/node-zk-ultralight.png)](https://david-dm.org/rackerlabs/node-zk-ultralight)
+
 # License
 
 Library is distributed under the [Apache license](http://www.apache.org/licenses/LICENSE-2.0.html).
