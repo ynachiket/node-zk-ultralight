@@ -23,7 +23,7 @@
     "test": "./scripts/tests.sh"
   },
   "dependencies": {
-    "zookeeper": "3.4.1-2",
+    "zookeeper": "3.4.5-2",
     "async": "= 0.1.18",
     "underscore": "= 1.4.4",
     "logmagic": "= 0.1.4"
