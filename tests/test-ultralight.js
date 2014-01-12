@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+var test = require('tape');
+
 var async = require('async');
 
 var zkultra = require('../lib/ultralight');
@@ -22,44 +24,35 @@ var URLS = ['127.0.0.1:2181'];
 var BAD_URLS = ['127.0.0.1:666'];
 
 
-exports['tearDown'] = function(test, assert) {
-  zkultra.shutdown();
-  test.finish();
-};
-
-
-exports['test_lock_unlock'] = function(test, assert) {
+test('lock and unlock', function(t) {
   var cxn = zkultra.getCxn(URLS);
   async.series([
     cxn.lock.bind(cxn, '/plumber/wrench', 'grrr'),
     cxn.unlock.bind(cxn, '/plumber/wrench')
   ], function(err, result) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err, "No error in lock and unlock");
+    t.end();
   });
-};
+});
 
-
-exports['test_timeout_on_no_cxn'] = function(test, assert) {
+test('timeout on no connection', function(t) {
   var cxn = zkultra.getCxn(BAD_URLS, 500);
   cxn.lock('/some-lock', 'not happening', function(err) {
-    assert.ok(err);
-    assert.ok(err instanceof Error);
-    test.finish();
+    t.ok(err, "Correctly received error on timeout");
+    t.ok(err instanceof Error);
+    t.end();
   });
-};
+});
 
-
-exports['test_create_no_slash_in_path'] = function(test, assert) {
+test('create with invalid path (missing a slash)', function(t) {
   var cxn = zkultra.getCxn(URLS);
   cxn.lock('INVALID_PATH', 'ponies', function(err) {
-    assert.ok(err);
-    test.finish();
+    t.ok(err, "Invalid path receives an error");
+    t.end();
   });
-};
+});
 
-
-exports['test_same_client_acquires_lock_twice_with_unlock'] = function(test, assert) {
+test('same client acquires lock twice with unlock', function(t) {
   var
     start = new Date().getTime();
     cxn = zkultra.getCxn(URLS);
@@ -72,18 +65,17 @@ exports['test_same_client_acquires_lock_twice_with_unlock'] = function(test, ass
     'unlock one': ['take one sleep', cxn.unlock.bind(cxn, '/apple/tree')],
     'take two': ['take one', function(callback) {
       cxn.lock('/apple/tree', 'apples', function(err) {
-        assert.ok(new Date().getTime() - start >= 500);
+        t.ok(new Date().getTime() - start >= 500, "The lock callback does not fire until after the first lock is unlocked");
         callback();
       });
     }]
   }, function(err) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err);
+    t.end();
   });
-};
+});
 
-
-exports['test_simple_lock_contention'] = function(test, assert) {
+test('simple lock contention', function(t) {
   var cxn = zkultra.getCxn(URLS);
   async.auto({
     'take one': cxn.lock.bind(cxn, '/plum/tree', 'plums'),
@@ -93,8 +85,8 @@ exports['test_simple_lock_contention'] = function(test, assert) {
     }],
     'take two': ['one locked', function(callback, result) {
       cxn.lock('/plum/tree', 'birds', function(err) {
-        assert.ifError(err);
-        assert.ok(result['one locked'] === false);
+        t.ifError(err);
+        t.ok(result['one locked'] === false);
         callback();
       });
     }],
@@ -103,13 +95,12 @@ exports['test_simple_lock_contention'] = function(test, assert) {
       cxn.unlock('/plum/tree', callback);
     }]
   }, function(err) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err);
+    t.end();
   });
-};
+});
 
-
-exports['test_slightly_less_simple_lock_contention'] = function(test, assert) {
+test('slightly less simple lock contention', function(t) {
   var cxn = zkultra.getCxn(URLS);
   async.auto({
     'take one': cxn.lock.bind(cxn, '/dogwood/tree', 'dogs'),
@@ -119,16 +110,16 @@ exports['test_slightly_less_simple_lock_contention'] = function(test, assert) {
     }],
     'take two': ['one locked', function(callback, result) {
       cxn.lock('/dogwood/tree', 'birds', function(err) {
-        assert.ifError(err);
-        assert.ok(result['one locked'] === false);
+        t.ifError(err);
+        t.ok(result['one locked'] === false);
         callback();
       });
     }],
     'two locked': ['take two', function(callback) { callback(null, true); }],
     'take three': ['two locked', function(callback, result) {
       cxn.lock('/dogwood/tree', 'sunshine', function(err) {
-        assert.ifError(err);
-        assert.ok(result['two locked'] === false);
+        t.ifError(err);
+        t.ok(result['two locked'] === false);
         callback();
       });
     }],
@@ -141,13 +132,12 @@ exports['test_slightly_less_simple_lock_contention'] = function(test, assert) {
       cxn.unlock('/dogwood/tree', callback);
     }]
   }, function(err) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err);
+    t.end();
   });
-};
+});
 
-
-exports['test_concurrent_locks_with_one_client'] = function(test, assert) {
+test('concurrent locks with one client', function(t) {
   var cxn = zkultra.getCxn(URLS);
   async.auto({
     'lock a': cxn.lock.bind(cxn, '/dog/brain', 'woof'),
@@ -155,13 +145,12 @@ exports['test_concurrent_locks_with_one_client'] = function(test, assert) {
     'unlock a': ['lock b', cxn.unlock.bind(cxn, '/dog/brain')],
     'unlock b': ['unlock a', cxn.unlock.bind(cxn, '/cat/brain')]
   }, function(err) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err);
+    t.end();
   });
-};
+});
 
-
-exports['test_close_unlocks_so_others_can_lock'] = function(test, assert) {
+test('close unlocks so others can lock', function(t) {
   var cxn = zkultra.getCxn(URLS);
   async.auto({
     'lock': cxn.lock.bind(cxn, '/111/Minna', 'great coffee'),
@@ -173,22 +162,32 @@ exports['test_close_unlocks_so_others_can_lock'] = function(test, assert) {
       results['new client'].lock('/111/Minna', 'still great coffee', callback);
     }]
   }, function(err) {
-    assert.ifError(err);
-    test.finish();
+    t.ifError(err);
+    t.end();
   });
-};
+});
 
-
-exports['test_get_children_error'] = function(test, assert) {
+// this test validates we handle a zk server bug correctly
+test('get children error', function(t) {
   var cxn = zkultra.getCxn(URLS);
 
   // Override the ._getChildren function to force it to error when called inside of .lock
   cxn._getChildren = function(path, watch, callback) {
-    callback('no node');
+    callback('mocking an incorrect response from zk server');
   };
 
   cxn.lock('/Stumptown/coffee', 'the best coffee', function(err) {
-    assert.ok(err);
-    test.finish();
+    t.ok(err);
+    t.end();
   });
-};
+});
+
+// this needs to be last, tape has no notion of 'cleanup'
+test('cleanup', function(t) {
+  zkultra.shutdown();
+  t.end();
+});
+
+
+
+

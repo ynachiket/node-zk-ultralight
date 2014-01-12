@@ -1,7 +1,9 @@
-<a href="https://nodei.co/npm-dl/zk-ultralight/"><img src="https://nodei.co/npm-dl/zk-ultralight.png"></a>
 # Ultralight ZK locking utility
 
 Slimmer profile, low-calorie distributed locking library based on [node-zookeeper-client](https://github.com/racker/node-zookeeper-client)
+
+<a href="https://nodei.co/npm-dl/zk-ultralight/"><img src="https://nodei.co/npm-dl/zk-ultralight.png"></a>
+[![Dependency Status](https://david-dm.org/rackerlabs/node-zk-ultralight.png)](https://david-dm.org/rackerlabs/node-zk-ultralight)
 
 ## Why a new library?
 
@@ -42,15 +44,17 @@ $ cd /vagrant
 $ make
 ```
 
-### Running tests
+### Tests
 
-`npm run-script test`
+`npm test`
 
-### Running lint
+### Lint
 
 `npm run-script lint`
 
-[![Dependency Status](https://david-dm.org/rackerlabs/node-zk-ultralight.png)](https://david-dm.org/rackerlabs/node-zk-ultralight)
+### Coverage
+
+`npm run-script coverage`
 
 # License
 

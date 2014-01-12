@@ -1,3 +1,3 @@
 all:
-	cd node_modules/zookeeper && node-gyp configure build
+	cd node_modules/zookeeper && node-gyp clean configure build
 
