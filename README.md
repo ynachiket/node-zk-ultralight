@@ -33,7 +33,7 @@ function someAsyncActionWithLocking(callback) {
 ### Building
 
 ```bash
-$ git clone https://github.com/racker/node-zk-ultralight
+$ git clone https://github.com/rackerlabs/node-zk-ultralight
 $ cd node-zk-ultralight
 $ npm install .
 $ vagrant up
