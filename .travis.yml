@@ -6,6 +6,7 @@ node_js:
 
 before_install:
   - npm conf set strict-ssl false
+  - npm install
 
 install:
   - sudo echo "deb http://download.virtualbox.org/virtualbox/debian precise contrib" | sudo tee -a /etc/apt/sources.list
